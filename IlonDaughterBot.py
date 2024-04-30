@@ -1,13 +1,15 @@
 from requests   import get
 from time       import time, sleep
 
-BOT_TOKEN = '7079074797:AAFU_V0jeIARYquvZE36zwCRmbnG6VZ_FZM'
+BOT_TOKEN = ':))'
 API_URL = 'https://api.telegram.org/bot'
 timeout = 40
 
 offset = -2
 chat_id: int
 
+def END():
+    print("1 answer sended!")
 
 while True:
     updates = get(f'{API_URL}{BOT_TOKEN}/getUpdates?offset={offset + 1}').json()
@@ -26,5 +28,6 @@ while True:
                     TEXT = 'Серкан Болат поцелуй меня'
 
             get(f'{API_URL}{BOT_TOKEN}/sendMessage?chat_id={chat_id}&text={TEXT}')
+            END()
 
     sleep(1)
