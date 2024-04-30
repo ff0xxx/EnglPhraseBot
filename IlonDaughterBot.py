@@ -25,7 +25,7 @@ while True:
                 case 'пока':
                     TEXT = 'Всё только впереди >:)'
                 case _:
-                    TEXT = 'Серкан Болат поцелуй меня'
+                    TEXT = 'Я Серкан Болат'
 
             get(f'{API_URL}{BOT_TOKEN}/sendMessage?chat_id={chat_id}&text={TEXT}')
             END()
