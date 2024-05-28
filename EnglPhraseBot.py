@@ -20,7 +20,6 @@ async def process_help_command(message: Message):
         'В боте есть следующий функционал:\n'
         'Х - периодичность появления фразы\n'
         'У - тема фраз\n'
-        'Z - отключить отправку фраз\n'
     )
 
 @dp.message(F.photo)
