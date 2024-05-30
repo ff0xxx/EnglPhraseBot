@@ -2,7 +2,7 @@ from aiogram import Bot, Dispatcher, F
 from aiogram.filters import Command
 from aiogram.types import Message
 
-BOT_TOKEN = '0'
+BOT_TOKEN = '7457980077:AAEM1VMCaTp-RtZ3HIS-E6t8ZzQTHOxS_r8'
 
 bot = Bot(token=BOT_TOKEN)
 dp = Dispatcher()
@@ -11,7 +11,12 @@ dp = Dispatcher()
 @dp.message(Command(commands=['start']))
 async def process_start_command(message: Message):
     """ХЭНДЛЕР ДЛЯ ОБРАБОТКИ КОМАНДЫ '\\start'"""
-    await message.answer('Привет!\nДавай учить популярные фразы в английском со мной!')
+    await message.answer('Привет!\nДавай учить популярные фразы в английском со мной!\n'
+                         'Выбери сайт, с которого будем учить фразы:)\n'
+                         '1 - skyeng (100)\n'
+                         '2 - smileenglish (200)\n'
+                         '3 - lingua-academ (380)')
+
 
 @dp.message(Command(commands=['help']))
 async def process_help_command(message: Message):
