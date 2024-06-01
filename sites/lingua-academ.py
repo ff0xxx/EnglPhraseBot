@@ -7,22 +7,22 @@ URL = 'https://lingua-academ.ru/blog/380_populyarnih_razgovornih_fraz_na_angliis
 def lingua_academ():
     response = get(URL)
     response.encoding = 'utf-8'
-
-    soup = BeautifulSoup(response.text)
-
-    res_dict = dict()
+    soup = BeautifulSoup(response.text, 'lxml')
 
     tables_list = soup.find('div', class_='article_body').find_all('tbody')
+    themes_list: list[str] = [theme.text.strip() for theme in soup.select('[id^="anchor_"]')]
+    phrases: dict[str: dict] = dict()
 
-    for table in tables_list:
-        tr_list = table.find_all('tr')
+    for theme, table in zip(themes_list, tables_list):
+        theme_phrases: dict[str: str] = dict()
 
-        for tr in tr_list[:-2]:
-            td_list = tr.find_all('td')
+        for tr in table.find_all('tr'):
+            p_list = tr.find_all('p')
+            theme_phrases[p_list[0].text.strip()] = p_list[1].text.strip()
 
-            res_dict[td_list[0].text.strip()] = td_list[1].text.strip()
+        phrases[theme] = theme_phrases
 
-    return res_dict
+    return phrases
 
 
-# pprint(lingua_academ()) - обрабатывается почему-то не вся страница
+pprint(lingua_academ())

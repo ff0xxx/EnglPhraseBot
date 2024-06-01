@@ -1,8 +1,12 @@
-from aiogram import Bot, Dispatcher, F
-from aiogram.filters import Command
-from aiogram.types import Message
+from environs           import Env
+from aiogram            import Bot, Dispatcher, F
+from aiogram.filters    import Command
+from aiogram.types      import Message
 
-BOT_TOKEN = '7457980077:AAEM1VMCaTp-RtZ3HIS-E6t8ZzQTHOxS_r8'
+env = Env()
+env.read_env()
+
+BOT_TOKEN = env('BOT_TOKEN')
 
 bot = Bot(token=BOT_TOKEN)
 dp = Dispatcher()
