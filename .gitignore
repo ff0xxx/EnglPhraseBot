@@ -1,6 +1,12 @@
 config_data/.env
 .idea/
 
+.mypy_cache/
+.vscode/
+venv/
+#__pycache__/
+
+#---------------------------------------------
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

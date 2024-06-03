@@ -1,7 +1,6 @@
 from aiogram import Router
 from aiogram.filters import Command
 from aiogram.types import Message
-from lexicon import LEXICON_RU
 
 router: Router = Router()
 
