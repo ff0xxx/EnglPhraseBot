@@ -1,5 +1,8 @@
-from aiogram.types import KeyboardButton, ReplyKeyboardMarkup
+from aiogram.types import KeyboardButton, ReplyKeyboardMarkup, InlineKeyboardButton, InlineKeyboardMarkup
+from aiogram.utils.keyboard import InlineKeyboardBuilder
+from parsers import skyeng
 
+# -------------------------select_site_keyboard-------------------------
 
 button_1 = KeyboardButton(text='skyeng (100)')
 button_2 = KeyboardButton(text='smileenglish (200)')
@@ -13,14 +16,12 @@ select_site_keyboard = ReplyKeyboardMarkup(
     one_time_keyboard=True,
     input_field_placeholder='Кнопки нажимай, дубина')
 
+# -------------------------skyeng_inline_keyboard-------------------------
 
-btn1 = KeyboardButton(text='Hello')
-btn2 = KeyboardButton(text='Goodbye!')
-btn3 = KeyboardButton(text='How are you?')
+btn0 = InlineKeyboardButton(text='link',
+                            url=skyeng.URL)
+btns = [InlineKeyboardButton(text=theme, callback_data='skyeng') for theme in skyeng.themes_list]
 
-skyeng_keyboard = ReplyKeyboardMarkup(
-    keyboard=[[btn1, btn2],
-              [btn3]],
-    resize_keyboard=True,
-    one_time_keyboard=True,
-    input_field_placeholder='Надо выбрать тему для 100 фраз')
+builder = InlineKeyboardBuilder().row(*btns, width=1).add(btn0)
+
+skyeng_inline_keyboard = builder.as_markup()
