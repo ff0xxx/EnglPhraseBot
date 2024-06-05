@@ -10,7 +10,7 @@ soup = BeautifulSoup(response.text, 'lxml')
 themes_list = [theme.text.strip(':') for theme in soup.select('div[class="-adults root"] > h2, '
                                                               'div[class="-adults root"] > h3')[:-1]]
 tables_list = soup.find_all('tbody')
-phrases = dict()
+phrases: dict[str: dict] = dict()
 
 for theme, table in zip(themes_list, tables_list):
     theme_phrases = dict()

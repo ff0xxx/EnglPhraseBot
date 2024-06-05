@@ -5,7 +5,7 @@ from aiogram.client.default import DefaultBotProperties
 from aiogram.enums          import ParseMode
 
 from config_data.config     import Config, load_config
-from handlers               import user_handlers, other_handlers, trol
+from handlers               import user_handlers, other_handlers
 from keyboards.set_menu     import set_main_menu
 
 

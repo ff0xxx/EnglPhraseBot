@@ -1,7 +1,8 @@
 import aiogram.exceptions
 from aiogram import Router, F
 from aiogram.types import Message, CallbackQuery
-from keyboards.keyboards import skyeng_inline_keyboard
+from keyboards.keyboards import (PhrasesCallbackFactory, skyeng_inline_keyboard,
+                                 theme_keyboard, phrase_keyboard)
 from lexicon.lexicon_ru import LEXICON_RU
 
 
@@ -10,24 +11,40 @@ router: Router = Router()
 
 @router.message(F.text == 'skyeng (100)')
 async def process_skyeng_answer(message: Message):
-    """хендлер кнопки (выбора сайта): skyeng"""
-    await message.answer(text=f'{message.chat.first_name}, выбери тему:\n',
-                         reply_markup=skyeng_inline_keyboard)
+    """хендлер кнопки (выбора САЙТА): skyeng"""
+    try:
+        await message.answer(text='Выберите тему фраз:\n',
+                             reply_markup=skyeng_inline_keyboard)
+    except aiogram.exceptions.TelegramBadRequest:
+        await message.answer(text='Ты уже нажал на тему!')
+
+
+@router.callback_query(PhrasesCallbackFactory.filter())
+async def phrase_keyboard_answer(callback: CallbackQuery):
+    """хендлер кнопки (выбора ФРАЗЫ): skyeng"""
+    # сюда летит с колбеком -> phrase:0:2:1
+    print('CALLBACK.DATA 2 (передаю): ------------>', callback.data)
+    try:
+        await callback.message.edit_text(
+            text=callback.data + '\n\nИдет работа с карточками',
+            reply_markup=phrase_keyboard(callback.data),
+            #reply_markup=callback.message.reply_markup
+        )
+    except aiogram.exceptions.TelegramBadRequest:
+        await callback.answer(text='Ты уже нажал на фразу')
 
 
 @router.callback_query()
 async def skyeng_btn_answer(callback: CallbackQuery):
-    """хендлер кнопки btn (skyeng)"""
+    """хендлер кнопки (выбора ТЕМЫ): skyeng"""
     try:
+        print('CALLBACK.DATA (передаю): ------------>', callback.data)
         await callback.message.edit_text(
-            text=callback.data + '\n\nЧто-то будет происходить после нажатия этой кнопки\n'
-                               'Можно новую Inline клавиатуру прикрепить, но я оставлю старую',
-            reply_markup=callback.message.reply_markup
+            text=callback.data + '\n\nИдет работа с карточками',
+            reply_markup=theme_keyboard(callback.data)
         )
     except aiogram.exceptions.TelegramBadRequest:
-        if callback.from_user.id == 5844230371:
-            await callback.answer(text="I'm watching you=)", show_alert=True)
-        await callback.answer(text='Один гордится тобой!')
+        await callback.answer(text='Ты переходишь в режим работы с карточками!')
 
 
 @router.message()
