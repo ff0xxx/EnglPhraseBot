@@ -1,8 +1,8 @@
-from aiogram import Router, F
-from aiogram.filters import Command
-from aiogram.types import Message, ReplyKeyboardRemove
-from lexicon.lexicon_ru import LEXICON_RU
-from keyboards.keyboards import select_site_keyboard
+from aiogram                import Router, F
+from aiogram.filters        import Command
+from aiogram.types          import Message, ReplyKeyboardRemove
+from lexicon.lexicon_ru     import LEXICON_RU
+from keyboards.keyboards    import select_site_keyboard
 
 
 router: Router = Router()
@@ -13,7 +13,7 @@ async def process_start_command(message: Message):
     """ХЭНДЛЕР ДЛЯ ОБРАБОТКИ КОМАНДЫ '\\start'"""
     await message.answer(
         text=LEXICON_RU['/start'],
-        reply_markup=select_site_keyboard)
+        reply_markup=select_site_keyboard())
 
 
 @router.message(Command(commands=['help']))
