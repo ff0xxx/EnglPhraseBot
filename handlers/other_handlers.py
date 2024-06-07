@@ -16,7 +16,7 @@ async def process_forward_press(callback: CallbackQuery):
 
     try:
         await callback.message.edit_text(
-            text=callback.data + LEXICON_RU['forth'],
+            text=LEXICON_RU['forth'],
             reply_markup=pagination_keyboard(callback.data)
             #reply_markup=callback.message.reply_markup
         )
@@ -31,7 +31,7 @@ async def process_backward_press(callback: CallbackQuery):
     """хендлер кнопки (НАЗАД): пагинация"""
     try:
         await callback.message.edit_text(
-            text=callback.data + LEXICON_RU['back'],
+            text=LEXICON_RU['back'],
             reply_markup=pagination_keyboard(callback.data)
         )
     except aiogram.exceptions.TelegramBadRequest:
@@ -52,7 +52,7 @@ async def process_phrases_press_2(callback: CallbackQuery):
     """хендлер кнопки (ФРАЗЫ 2) -- модифицируются кнопки process_phrases_press_1"""
     try:
         await callback.message.edit_text(
-            text=callback.data + LEXICON_RU['phrase'],
+            text=LEXICON_RU['phrase'],
             reply_markup=phrase_keyboard_2(callback.data),
         )
     except aiogram.exceptions.TelegramBadRequest:
@@ -65,7 +65,7 @@ async def process_phrases_press_1(callback: CallbackQuery):
     """хендлер кнопки (ФРАЗЫ 1)"""
     try:
         await callback.message.edit_text(
-            text=callback.data + LEXICON_RU['phrase'],
+            text=LEXICON_RU['phrase'],
             reply_markup=phrase_keyboard_1(callback.data)
         )
     except aiogram.exceptions.TelegramBadRequest:

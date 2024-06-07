@@ -62,7 +62,6 @@ def theme_keyboard(site_name: str) -> InlineKeyboardMarkup:
 # site +
 def pagination_add_func(btn_list: list[InlineKeyboardButton]) -> InlineKeyboardMarkup:
     """ИЗ СПИСКА INLINE-КНОПОК ДЕЛАЮ PAGINATION-КЛАВИАТУРУ"""
-    print('BTN_LIST: ', btn_list)
     # site:theme:phrase:lang:page
     first_btn_callback_data = list(map(int, btn_list[0].callback_data.split(':')[1:]))
 

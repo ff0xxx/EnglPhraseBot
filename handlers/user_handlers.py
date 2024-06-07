@@ -1,6 +1,6 @@
 from aiogram                import Router, F
-from aiogram.filters        import Command
-from aiogram.types          import Message, ReplyKeyboardRemove
+from aiogram.filters        import Command, ChatMemberUpdatedFilter, KICKED
+from aiogram.types          import Message, ReplyKeyboardRemove, ChatMemberUpdated
 from lexicon.lexicon_ru     import LEXICON_RU
 from keyboards.keyboards    import site_keyboard
 
@@ -20,6 +20,12 @@ async def process_start_command(message: Message):
 async def process_help_command(message: Message):
     """ХЭНДЛЕР ДЛЯ ОБРАБОТКИ КОМАНДЫ '\\help'"""
     await message.answer(LEXICON_RU['/help'])
+
+
+# Этот хэндлер будет срабатывать на блокировку бота пользователем
+@router.my_chat_member(ChatMemberUpdatedFilter(member_status_changed=KICKED))
+async def process_user_blocked_bot(event: ChatMemberUpdated):
+    print(f'Пользователь {event.from_user.id} заблокировал бота')
 
 
 @router.message(F.text == 'иди нахуй')

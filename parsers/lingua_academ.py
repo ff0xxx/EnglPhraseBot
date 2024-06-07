@@ -1,5 +1,5 @@
-from bs4 import BeautifulSoup
-from requests import get
+from bs4        import BeautifulSoup
+from requests   import get
 
 URL = 'https://lingua-academ.ru/blog/380_populyarnih_razgovornih_fraz_na_angliiskom'
 

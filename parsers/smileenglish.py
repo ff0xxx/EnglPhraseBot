@@ -1,5 +1,5 @@
-from bs4 import BeautifulSoup
-from requests import get
+from bs4        import BeautifulSoup
+from requests   import get
 
 URL = 'https://smileenglish.ru/technique/anglijskij-dlya-turistov-200-fraz/'
 
