@@ -20,7 +20,7 @@ class IsBackwardCallbackData(BaseFilter):
             return False
 
 
-class IsNCallbackData(BaseFilter):
+class IsStayCallbackData(BaseFilter):
     async def __call__(self, callback: CallbackQuery) -> bool:
         try:
             return callback.data.split(':')[1] == 'n'
