@@ -3,7 +3,7 @@ from aiogram                import Router, F
 from aiogram.types          import Message, CallbackQuery
 from keyboards.keyboards    import (PhrasesCallbackFactory, skyeng_inline_keyboard,
                                     theme_keyboard, pagination_theme_keyboard, phrase_keyboard)
-from filters.filters        import IsForwardCallbackData
+from filters.filters        import IsForwardCallbackData, IsBackwardCallbackData, IsNCallbackData
 from lexicon.lexicon_ru     import LEXICON_RU
 
 
@@ -23,15 +23,39 @@ async def process_skyeng_answer(message: Message):
 @router.callback_query(IsForwardCallbackData())
 async def process_forward_press(callback: CallbackQuery):
     """хендлер кнопки (ВПЕРЕД): пагинация"""
-    print('FORWARD ПОЙМАЛ !!!!!!!!!!!!!!!!!!!!!!!')
+
     try:
         await callback.message.edit_text(
             text=callback.data + '\n\nВы пролистнули вперед',
-            reply_markup=pagination_theme_keyboard(callback.data) # ?????????????
+            reply_markup=pagination_theme_keyboard(callback.data)
             #reply_markup=callback.message.reply_markup
         )
     except aiogram.exceptions.TelegramBadRequest:
         await callback.answer(text='Вы переходите на следующую страницу')
+    except IndexError:
+        await callback.answer(text='Шалунишка)\nВидишь же, что страницы кончились')
+
+
+@router.callback_query(IsBackwardCallbackData())
+async def process_backward_press(callback: CallbackQuery):
+    """хендлер кнопки (НАЗАД): пагинация"""
+
+    try:
+        await callback.message.edit_text(
+            text=callback.data + '\n\nВы пролистнули назад',
+            reply_markup=pagination_theme_keyboard(callback.data)
+        )
+    except aiogram.exceptions.TelegramBadRequest:
+        await callback.answer(text='Вы переходите на предыдущую страницу')
+    except IndexError:
+        await callback.answer(text='Шалунишка)\nВидишь же, что страницы кончились')
+
+
+@router.callback_query(IsNCallbackData())
+async def process_backward_press(callback: CallbackQuery):
+    """хендлер кнопки (СТОЙ): пагинация"""
+
+    await callback.answer(text='Этот функционал еще не проработан', show_alert=True)
 
 
 @router.callback_query(PhrasesCallbackFactory.filter())

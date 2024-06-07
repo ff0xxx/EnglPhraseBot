@@ -42,8 +42,6 @@ def skyeng_inline_keyboard() -> InlineKeyboardMarkup:
 def pagination_add_func(btn_list: list[InlineKeyboardButton]) -> InlineKeyboardMarkup:
     """ИЗ СПИСКА INLINE-КНОПОК ДЕЛАЮ PAGINATION-КЛАВИАТУРУ"""
     print('BTN_LIST: ', btn_list)
-    print('PPPP', btn_list[0].callback_data)
-
 
     # site:theme:phrase:lang:page
     first_btn_callback = btn_list[0].callback_data.split(':')[1:]
@@ -51,14 +49,12 @@ def pagination_add_func(btn_list: list[InlineKeyboardButton]) -> InlineKeyboardM
     page = int(first_btn_callback[4])
 
     theme_index = int(first_btn_callback[1])
-    print('THEME_INDEX: ', theme_index)
     theme = list(skyeng.phrases.keys())[theme_index]
-    print('THEME: ', theme)
 
     backward_btn = InlineKeyboardButton(text=LEXICON_RU['backward'],
                                         callback_data=PaginationCallbackFactory(
                                         stream='b', site_id=0, theme_id=theme_index, page_id=page).pack())
-    pagination_btn = InlineKeyboardButton(text=f'1 / {(len(skyeng.phrases[theme]) + 5) // 6}',
+    pagination_btn = InlineKeyboardButton(text=f'{page} / {(len(skyeng.phrases[theme]) + 5) // 6}',
                                           callback_data=PaginationCallbackFactory(
                                           stream='n', site_id=0, theme_id=theme_index, page_id=page).pack())
     forward_btn = InlineKeyboardButton(text=LEXICON_RU['forward'],
@@ -85,7 +81,6 @@ class PhrasesCallbackFactory(CallbackData, prefix='phrase'):
 # need to sent only 6 first btns
 def theme_keyboard(theme_index: str) -> InlineKeyboardMarkup:
     """КОГДА ПОЛЬЗОВАТЕЛЬ НАЖАЛ ТЕМУ"""
-    print('THEME (получаю): ------------>', theme_index)
     theme = list(skyeng.phrases.keys())[int(theme_index)]
 
     phr = []
@@ -109,7 +104,6 @@ def theme_keyboard(theme_index: str) -> InlineKeyboardMarkup:
 
 def phrase_keyboard(callback_data: str, page=0):
     """"КОГДА ПОЛЬЗОВАТЕЛЬ ПОСЛЕ ТЕМЫ НАЖАЛ НА ФРАЗУ (А НЕ КНОПКУ ПАГИНАЦИИ)"""
-    print('THEME /phrase_keyboard/ (получаю): ------------>', callback_data)
 
     # site:theme:phrase:lang:page <-- получаю параметры определенной КНОПКИ
     callback = list(map(int, callback_data.split(':')[1:]))
@@ -141,7 +135,6 @@ def phrase_keyboard(callback_data: str, page=0):
                                                                                  lang_id=(callback[3]+1)%2,
                                                                                  page_id=page).pack())
 
-    print(f'CALLBACK={callback}\nPAGE={page}\n(page-1)*6:page*6 IS {(page-1)*6}:{page*6}')
     return pagination_add_func(phr[(page-1)*6:page*6])
 
 
@@ -154,16 +147,19 @@ class PaginationCallbackFactory(CallbackData, prefix='pagination'):
     page_id: int
 
 
-# НЕ РАБОТАЕТ - КЛИНИКА
 def pagination_theme_keyboard(callback: str) -> InlineKeyboardMarkup:
     """"КОГДА ПОЛЬЗОВАТЕЛЬ ПОСЛЕ ТЕМЫ НАЖАЛ НА КНОПКУ ПАГИНАЦИИ (А НЕ ФРАЗУ)"""
-    print('THEME /pagination_theme_keyboard/ (получаю): ------------>', callback) # pagination:f:0:2:1
 
     # stream:site:theme:page
     callback_data = callback.split(':')[1:]
 
+    stream = callback_data[0]
+    page = int(callback_data[3])
     theme_index: int = int(callback_data[2])
-    theme = list(skyeng.phrases.keys())[int(theme_index)]
+    theme = list(skyeng.phrases.keys())[theme_index]
+
+    if page > len(skyeng.phrases[theme])+5//6:
+        raise IndexError
 
     phr = []
     page_size = 6
@@ -173,11 +169,12 @@ def pagination_theme_keyboard(callback: str) -> InlineKeyboardMarkup:
             page_var += 1
         phr.append(InlineKeyboardButton(text=eng,
                                         callback_data=PhrasesCallbackFactory(site_id=0,
-                                                                             theme_id=2,
+                                                                             theme_id=theme_index,
                                                                              phrase_id=i,
                                                                              lang_id=0,
                                                                              page_id=page_var).pack()))
 
-    page = int(callback_data[3])
-    print(f'phr[{page*6}:{(page+1)*6}]')
-    return pagination_add_func(phr[page*6:(page+1)*6])
+    if stream == 'f':
+        return pagination_add_func(phr[page*6:(page+1)*6])
+    elif stream == 'b':
+        return pagination_add_func(phr[(page-2)*6:(page-1)*6])
