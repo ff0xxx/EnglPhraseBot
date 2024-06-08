@@ -1,5 +1,5 @@
-from bs4 import BeautifulSoup
-from requests import get
+from bs4        import BeautifulSoup
+from requests   import get
 
 URL = 'https://skyeng.ru/articles/100-poleznyh-razgovornyh-fraz-na-anglijskom/'
 
