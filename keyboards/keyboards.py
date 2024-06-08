@@ -25,7 +25,6 @@ sites_index_module = {
 }
 
 
-# site +
 def site_keyboard() -> ReplyKeyboardMarkup:
     """ДЕЛАЮ ОБЫЧНУЮ КЛАВИАТУРУ ДЛЯ ВЫБОРА САЙТА"""
     button_1 = KeyboardButton(text='skyeng (100)')
@@ -43,7 +42,6 @@ def site_keyboard() -> ReplyKeyboardMarkup:
     return keyboard
 
 
-# site +
 def theme_keyboard(site_name: str) -> InlineKeyboardMarkup:
     """ДЕЛАЮ INLINE-КЛАВИАТУРУ ДЛЯ ТЕМ ПО САЙТУ"""
 
@@ -59,7 +57,6 @@ def theme_keyboard(site_name: str) -> InlineKeyboardMarkup:
     return builder.as_markup()
 
 
-# site +
 def pagination_add_func(btn_list: list[InlineKeyboardButton]) -> InlineKeyboardMarkup:
     """ИЗ СПИСКА INLINE-КНОПОК ДЕЛАЮ PAGINATION-КЛАВИАТУРУ"""
     # site:theme:phrase:lang:page
@@ -97,7 +94,6 @@ class PhrasesCallbackFactory(CallbackData, prefix='phrase'):
     page_id: int
 
 
-# sites +
 def phrase_keyboard_1(theme_callback_data: str) -> InlineKeyboardMarkup:
     """ПОЛЬЗОВАТЕЛЬ НАЖАЛ НА ТЕМУ"""
     # "theme site" <- callback
@@ -125,7 +121,6 @@ def phrase_keyboard_1(theme_callback_data: str) -> InlineKeyboardMarkup:
     return pagination_add_func(phr[:6])
 
 
-#sites +
 def phrase_keyboard_2(phrase_callback_data: str):
     """"ПОЛЬЗОВАТЕЛЬ НАЖАЛ НА ФРАЗУ"""
     # site:theme:phrase:lang:page
@@ -166,8 +161,6 @@ def phrase_keyboard_2(phrase_callback_data: str):
     return pagination_add_func(phr[(page-1)*6:page*6])
 
 
-# -------------------------pagination_theme_keyboard-(interaction started)-------------------------
-
 class PaginationCallbackFactory(CallbackData, prefix='pagination'):
     stream: str     # b / n / f
     site_id: int
@@ -175,7 +168,6 @@ class PaginationCallbackFactory(CallbackData, prefix='pagination'):
     page_id: int
 
 
-# site +
 def pagination_keyboard(callback: str) -> InlineKeyboardMarkup:
     """"ПОЛЬЗОВАТЕЛЬ НАЖАЛ НА КНОПКУ ПАГИНАЦИИ"""
     # прилетает pagination:f:0:2:1, а не phrase:0:2:0:0:1
@@ -209,3 +201,8 @@ def pagination_keyboard(callback: str) -> InlineKeyboardMarkup:
         return pagination_add_func(phr[page*6:(page+1)*6])
     elif stream == 'b':
         return pagination_add_func(phr[(page-2)*6:(page-1)*6])
+
+
+def reality_keyboard() -> InlineKeyboardMarkup:
+    kb = InlineKeyboardMarkup(inline_keyboard=[[InlineKeyboardButton(text='Что же с ними будет?', callback_data='sad')]])
+    return kb

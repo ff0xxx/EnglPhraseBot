@@ -2,7 +2,7 @@ from aiogram                import Router, F
 from aiogram.filters        import Command, ChatMemberUpdatedFilter, KICKED
 from aiogram.types          import Message, ReplyKeyboardRemove, ChatMemberUpdated
 from lexicon.lexicon_ru     import LEXICON_RU
-from keyboards.keyboards    import site_keyboard
+from keyboards.keyboards    import site_keyboard, reality_keyboard
 
 
 router: Router = Router()
@@ -20,6 +20,12 @@ async def process_start_command(message: Message):
 async def process_help_command(message: Message):
     """ХЭНДЛЕР ДЛЯ ОБРАБОТКИ КОМАНДЫ '\\help'"""
     await message.answer(LEXICON_RU['/help'])
+
+
+@router.message(Command(commands=['0x00']))
+async def reality_command(message: Message):
+    await message.answer(text=LEXICON_RU['=)'],
+                         reply_markup=reality_keyboard())
 
 
 # Этот хэндлер будет срабатывать на блокировку бота пользователем
